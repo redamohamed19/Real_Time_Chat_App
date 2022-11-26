@@ -1,12 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react';
+import { FaImage, FaUserPlus, FaVideo } from 'react-icons/fa';
+import { HiOutlineDotsHorizontal } from 'react-icons/hi';
 
 import Button from '@/components/buttons/Button';
 
 function dashboard() {
   return (
     <div className='flex h-screen w-full items-center justify-center bg-[#A8BCFF] '>
-      <div className='h-[800px] w-[1200px] rounded-xl bg-white '>
+      <div className='flex h-[800px] w-[1200px] rounded-xl bg-white '>
         {/**SideNavbar */}
         <div className='h-full w-1/3 '>
           <div className='flex h-[10%] items-center justify-between bg-[#2F2C52]  px-5 '>
@@ -54,7 +56,34 @@ function dashboard() {
           </div>
         </div>
         {/**Chat */}
-        <div className='w-2/3'></div>
+        <div className='h-full w-2/3'>
+          <div className='flex h-[10%] items-center justify-between bg-[#5E5B8F]  px-5 '>
+            <p className='text-lg font-semibold text-white'>Reda</p>
+            <div className='flex gap-2'>
+              {' '}
+              <FaVideo color='#E0DEFF' size='20px' />
+              <FaUserPlus color='#E0DEFF' size='20px' />{' '}
+              <HiOutlineDotsHorizontal color='#E0DEFF' size='20px' />
+            </div>
+          </div>
+          <div className='h-[83%] bg-[#E0DEFF]'></div>
+          <div className='flex h-[7%] px-3 '>
+            <input
+              type='text'
+              className='h-full w-[80%] border-none'
+              placeholder='Type something ...'
+            />
+            <div className='flex w-[20%] items-center justify-end gap-3'>
+              <div>
+                <input type='file' id='file' className='hidden' />
+                <label>
+                  <FaImage color='#ccc' size='20px' />
+                </label>
+              </div>
+              <Button>Send</Button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
