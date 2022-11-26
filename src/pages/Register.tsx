@@ -1,15 +1,34 @@
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import Link from 'next/link';
-import React from 'react';
+import React, { useState } from 'react';
 
-import Button from '@/components/buttons/Button';
-
+import { auth } from '@/firebase';
 function Register() {
+  const [error, setError] = useState<string>();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    const email = e.target[1].value;
+    const password = e.target[2].value;
+
+    try {
+      // eslint-disable-next-line unused-imports/no-unused-vars
+      const user = await createUserWithEmailAndPassword(auth, email, password);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      setError(error);
+    }
+  };
+
   return (
     <div className='flex h-screen w-full items-center justify-center bg-[#A8BCFF] '>
       <div className='w-[600px] rounded-xl bg-white '>
         <h1 className='py-4 text-center text-[rgb(91,88,116)] '>App Chat</h1>
         <p className='text-center text-[#5B5874]'>Register</p>
-        <form className='flex flex-col gap-5 py-4 px-10'>
+        <form
+          className='flex flex-col gap-5 py-4 px-10'
+          onSubmit={handleSubmit}
+        >
           <input
             type='text'
             className=' border-b-1 border-t-0 border-l-0 border-r-0  border-[#5B5874] '
@@ -25,13 +44,21 @@ function Register() {
             className=' border-b-1 border-t-0 border-l-0 border-r-0 border-[#5B5874] '
             placeholder='Password'
           />
-          <input type='file' id='file' />
+          <input type='file' id='file' className='hidden' />
           <label htmlFor='file' className='text-[#A8BCFF]'>
             Add an Avatar{' '}
           </label>
-          <Button className='flex items-center justify-center bg-[#7189D9] '>
+
+          <button
+            type='submit'
+            value='Open'
+            className='bg-[#7189D9] py-2 font-semibold text-[#fff]'
+          >
             Sign up
-          </Button>
+          </button>
+          {error && (
+            <p className='text-center text-red-500'>something happended</p>
+          )}
         </form>
         <p className='py-3 text-center'>
           You do have an account ?{' '}
