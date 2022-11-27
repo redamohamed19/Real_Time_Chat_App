@@ -1,20 +1,43 @@
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import Link from 'next/link';
 import React, { useState } from 'react';
 
-import { auth } from '@/firebase';
+import { auth, storage } from '@/firebase';
 function Register() {
   const [error, setError] = useState<string>();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    const displayName = e.target[0].value;
     const email = e.target[1].value;
     const password = e.target[2].value;
+    const file = e.target[3].files[0];
 
     try {
       // eslint-disable-next-line unused-imports/no-unused-vars
-      const user = await createUserWithEmailAndPassword(auth, email, password);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const response = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const storageRef = ref(storage, 'images/' + displayName + '.jpg');
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on(
+        'state_changed',
+        (error: any) => {
+          setError(error);
+        },
+        () => {
+          // Handle successful uploads on complete
+          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+          getDownloadURL(uploadTask.snapshot.ref).then(async (photoURL) => {
+            await updateProfile(response.user, { displayName, photoURL });
+          });
+        }
+      );
     } catch (error: any) {
       setError(error);
     }
