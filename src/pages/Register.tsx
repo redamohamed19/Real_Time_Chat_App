@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import Link from 'next/link';
 import React, { useState } from 'react';
 
-import { auth, storage } from '@/firebase';
+import { auth, db, storage } from '@/firebase';
 function Register() {
   const [error, setError] = useState<string>();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     const displayName = e.target[0].value;
@@ -22,7 +22,7 @@ function Register() {
         email,
         password
       );
-      const storageRef = ref(storage, 'images/' + displayName + '.jpg');
+      const storageRef = ref(storage, 'images/' + response.user.uid + '.jpg');
       const uploadTask = uploadBytesResumable(storageRef, file);
 
       uploadTask.on(
@@ -38,6 +38,11 @@ function Register() {
           });
         }
       );
+      await setDoc(doc(db, 'users', response.user.uid), {
+        uid: response.user.uid,
+        displayName,
+        email,
+      });
     } catch (error: any) {
       setError(error);
     }
