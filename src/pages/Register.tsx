@@ -3,11 +3,13 @@ import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
 import { auth, db, storage } from '@/firebase';
 function Register() {
   const [error, setError] = useState<string>();
+  const router = useRouter();
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     const displayName = e.target[0].value;
@@ -43,6 +45,8 @@ function Register() {
         displayName,
         email,
       });
+      await setDoc(doc(db, 'users-chat', response.user.uid), {});
+      router.push('/dashboard');
     } catch (error: any) {
       setError(error);
     }
