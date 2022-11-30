@@ -1,9 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
+import { signOut } from 'firebase/auth';
 import React from 'react';
 import { FaImage, FaUserPlus, FaVideo } from 'react-icons/fa';
 import { HiOutlineDotsHorizontal } from 'react-icons/hi';
 
 import Button from '@/components/buttons/Button';
+
+import { auth } from '@/firebase';
 
 function dashboard() {
   return (
@@ -19,7 +22,14 @@ function dashboard() {
                 alt='Avatar'
                 className='h-8 w-8 rounded-full'
               />
-              <Button className='border-none bg-[#3d3b5dec]'>logout</Button>
+              <Button
+                className='border-none bg-[#3d3b5dec]'
+                onClick={() => {
+                  signOut(auth);
+                }}
+              >
+                logout
+              </Button>
             </div>
           </div>
           <div className='h-[90%] bg-[#3d3b5dec]'>

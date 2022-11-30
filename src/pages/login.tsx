@@ -27,7 +27,7 @@ function Login() {
         </form>
         <p className='py-3 text-center'>
           You don't have an account ?{' '}
-          <Link href='' className='text-[rgb(91,88,116)]'>
+          <Link href='/register' className='text-[rgb(91,88,116)]'>
             Register
           </Link>
         </p>

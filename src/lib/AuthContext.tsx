@@ -3,10 +3,11 @@ import { createContext, useContext, useEffect, useState } from 'react';
 
 import { auth } from '@/firebase';
 
-export const AuthContext = createContext({});
+export const AuthContext = createContext({ user: null });
 export const useAuth = () => useContext(AuthContext);
 export const AuthProvider = ({ children }: { children: JSX.Element }) => {
-  const [user, setUser] = useState({});
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [user, setUser] = useState<any>();
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const subscription = onAuthStateChanged(auth, (user: any) => {
@@ -16,8 +17,6 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
     return subscription();
   }, []);
   return (
-    <AuthContext.Provider value={{ user, setUser }}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
   );
 };
